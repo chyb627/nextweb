@@ -33,6 +33,34 @@ npm i -D prettier eslint-plugin-prettier eslint-config-prettier
 ## 타입스크립트 설정
 
 - tsconfig.json 생성 및 설정
+
+{
+  "compilerOptions": {
+    "esModuleInterop": true,  // import * as React from 'react'를 import React from 'react'로 사용가능하다.
+    "sourceMap": true, // 원래 에러난 위치 찾아가기 편함
+    "lib": ["DOM", "ES2020"], // 라이브러리.
+    "jsx": "react",  //jsx가 리액트에 쓰인다는걸 지정.
+    "module": "esnext", // 최신 모듈을 쓰겠다.
+    "moduleResolution": "Node", // import export를 node도 인식할수 있도록 하겠다.
+    "target": "es5", // 소스코드를 ES2020으로 작성하더라도 얘를 es5로 변환하겠다.
+    "strict": true, // 타입체킹을 엄격하게 하겠다.
+    "resolveJsonModule": true, // JSON은 import JSON하는것을 허락하겠다.
+    "baseUrl": "./",
+    "paths": { // paths는 import A from ../../../../hello.js를 path설정을 하면 절대경로처럼 사용가능하다. import A from ~src/hello.js
+      "~hooks/*": ["src/hooks/*"],
+      "~components/*": ["src/components/*"],
+      "~pages/*": ["src/pages/*"],
+      "~utils/*": ["src/utils/*"],
+      // "~services/*": ["src/services/*"],
+      // "~assets/*": ["src/assets/*"],
+      // "~shared/*": ["src/shared/*"],
+      // "~recoil/*": ["src/recoil/*"],
+      // "~api/*": ["api/*"],
+      // "~styles/*": ["src/styles/*"],
+    },
+  }
+}
+
 - 타입스크립트를 -> 자바스크립트로 바꿀때는 2가지가있다. 첫째 타입스크립트가 바꿔주는대로 쓰겠다. 둘째 타입스크립트 -> 바벨 -> 자바스크립트
 - 바벨로 이어받는 방식 사용.
 - 바벨을 쓰는이유는 프론트앤드에서는 css, image파일 ,html등을 사용하는데, 바벨은 css,html ...등을 전부 자바스크립트로 변환해준다.
@@ -43,3 +71,7 @@ npm i -D prettier eslint-plugin-prettier eslint-config-prettier
 npm i -D webpack @babel/core babel-loader @babel/preset-env @babel/preset-react
 npm i -D @types/webpack @types/node @babel/preset-typescript
 npm i style-loader css-loader
+
+## HTML 생성
+
+- index.html 및 App.tsx 생성하여 초기화면 설정을 해준다.
