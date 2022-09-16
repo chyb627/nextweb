@@ -37,3 +37,9 @@ npm i -D prettier eslint-plugin-prettier eslint-config-prettier
 - 바벨로 이어받는 방식 사용.
 - 바벨을 쓰는이유는 프론트앤드에서는 css, image파일 ,html등을 사용하는데, 바벨은 css,html ...등을 전부 자바스크립트로 변환해준다.
 - 편의를 위해 다른파일도 많이쓰므로 바벨이 자바스크립트로 최종적으로 뽑아주는 개발을 많이한다.
+
+## webpack 설치 및 설정
+
+npm i -D webpack @babel/core babel-loader @babel/preset-env @babel/preset-react
+npm i -D @types/webpack @types/node @babel/preset-typescript
+npm i style-loader css-loader
