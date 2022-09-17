@@ -1,0 +1,24 @@
+{
+  "name": "nextweb",
+  "version": "1.0.0",
+  "description": "nextweb",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chyb627/nextweb.git"
+  },
+  "author": "cha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chyb627/nextweb/issues"
+  },
+  "homepage": "https://github.com/chyb627/nextweb#readme",
+  "dependencies": {
+    "next": "^12.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
