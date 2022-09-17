@@ -31,3 +31,7 @@ npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
 tailwind.config.js 설정
+
+## antd, styled-components
+
+npm i antd styled-components @ant-design/icons
