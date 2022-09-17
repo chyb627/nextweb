@@ -4,6 +4,7 @@
   "description": "nextweb",
   "main": "index.js",
   "scripts": {
+    "dev": "webpack serve --env development",
     "build": "NODE_ENV=production webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -32,6 +33,7 @@
     "dayjs": "^1.11.5",
     "gravatar": "^1.8.2",
     "react": "^18.2.0",
+    "react-custom-scrollbars-2": "^4.5.0",
     "react-dom": "^18.2.0",
     "react-mentions": "^4.4.7",
     "react-refresh": "^0.14.0",

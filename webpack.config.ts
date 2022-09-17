@@ -19,12 +19,12 @@ const config: Configuration = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'], // 바벨이 처리할 확장자
     alias: { // ../../ 없애는 것. 타입스크립트에서도 해줘야하고 웹팩에서도 해줘야함.
-      '@hooks': path.resolve(__dirname, 'hooks'),
-      '@components': path.resolve(__dirname, 'components'),
-      '@layouts': path.resolve(__dirname, 'layouts'),
-      '@pages': path.resolve(__dirname, 'pages'),
-      '@utils': path.resolve(__dirname, 'utils'),
-      '@typings': path.resolve(__dirname, 'typings'),
+      '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@layouts': path.resolve(__dirname, 'src/layouts'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
+      '@typings': path.resolve(__dirname, 'src/typings'),
     },
   },
   entry: {

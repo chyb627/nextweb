@@ -75,3 +75,59 @@ npm i style-loader css-loader
 ## HTML 생성
 
 - index.html 및 App.tsx 생성하여 초기화면 설정을 해준다.
+
+## 핫리로딩
+
+npm i -D webpack-dev-server
+npm i -D @types/webpack-dev-server
+
+npm i @pmmmwh/react-refresh-webpack-plugin
+npm i react-refresh
+
+npm i -D fork-ts-checker-webpack-plugin (타입스크립트랑 웹팩 동시에 돌아가도록 하는 라이브러리)
+
+## react-router-dom v6
+
+- react-router-dom이 버전 6로 업그레이드되면서, 
+- Switch를 더이상 지원을 안하게 됬다.
+- Switch -> routes로 바뀜. 
+- 또한 component도 element로 바꼈다.
+
+// This is a React Router v6 app
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link
+} from "react-router-dom";
+
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="users/*" element={<Users />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+function Users() {
+  return (
+    <div>
+      <nav>
+        <Link to="me">My Profile</Link>
+      </nav>
+
+      <Routes>
+        <Route path=":id" element={<UserProfile />} />
+        <Route path="me" element={<OwnUserProfile />} />
+      </Routes>
+    </div>
+  );
+}
+
+https://reactrouter.com/en/v6.3.0/upgrading/v5#upgrading-from-v5
+https://devalice.tistory.com/112
+
