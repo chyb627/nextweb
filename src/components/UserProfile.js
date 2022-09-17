@@ -2,7 +2,7 @@ import { Avatar, Card, Button } from 'antd';
 import React from 'react';
 
 const dummy = {
-  nickname: '제로초',
+  nickname: '영빈차',
   Posts: [],
   Followings: [],
   Followers: [],

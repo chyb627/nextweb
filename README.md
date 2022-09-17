@@ -14,7 +14,7 @@ npm i prop-types
 
 ## Link 사용방법
 
-``<Link href={"/"}><a>노드버드</a></Link>``
+``<Link href={"/"}><a>영빈웹</a></Link>``
 
 ## eslint, prettier
 
@@ -35,3 +35,9 @@ tailwind.config.js 설정
 ## antd, styled-components
 
 npm i antd styled-components @ant-design/icons
+
+## 리랜더링
+
+- 리랜더링이되면 return부분을 무조건 다시그리는건 아니다.
+- 리랜더링이되면 함수 처음부터 끝까지 다시실행되는건 맞다.
+- return 부분중에서도 바뀌는 부분만 다시그린다.
