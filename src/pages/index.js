@@ -4,7 +4,7 @@ import AppLayout from '../components/AppLayout';
 const Home = () => {
   return (
     <AppLayout>
-      <div>Hello, Next!</div>
+      <h1 className="text-3xl font-bold underline">Hello tailwindcss!</h1>
     </AppLayout>
   );
 };
