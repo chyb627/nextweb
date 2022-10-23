@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Col, Input, Menu, Row } from 'antd';
@@ -9,6 +9,14 @@ import UserProfile from './UserProfile';
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
+
+  const inputSearchStyle = useMemo(
+    () => ({
+      verticalAlign: 'middle',
+    }),
+    [],
+  );
+
   return (
     <div>
       <Menu mode="horizontal">
@@ -23,7 +31,7 @@ const AppLayout = ({ children }) => {
           </Link>
         </Menu.Item>
         <Menu.Item key="mail">
-          <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
+          <Input.Search enterButton style={inputSearchStyle} />
         </Menu.Item>
       </Menu>
       <Row gutter={8}>

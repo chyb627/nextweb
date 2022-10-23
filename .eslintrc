@@ -12,15 +12,12 @@
       "es6": true
     },
     "extends": [
-      "airbnb",
       "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:prettier/recommended"
+      "plugin:react/recommended"
     ],
     "plugins": [
       "import",
-      "react-hooks",
-      "prettier"
+      "react-hooks"
     ],
     "rules": {
       "jsx-a11y/label-has-associated-control": "off",
