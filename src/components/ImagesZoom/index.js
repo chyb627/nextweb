@@ -31,7 +31,10 @@ const ImagesZoom = ({ images, onClose }) => {
           </Slick>
           <Indicator>
             <div>
-              {currentSlide + 1} /{images.length}
+              {currentSlide + 1}
+              {' '}
+              /
+              {images.length}
             </div>
           </Indicator>
         </div>
@@ -41,11 +44,9 @@ const ImagesZoom = ({ images, onClose }) => {
 };
 
 ImagesZoom.propTypes = {
-  images: PropTypes.arrayOf(
-    PropTypes.shape({
-      src: PropTypes.string,
-    }),
-  ).isRequired,
+  images: PropTypes.arrayOf(PropTypes.shape({
+    src: PropTypes.string,
+  })).isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

@@ -1,14 +1,30 @@
 import React, { useMemo } from 'react';
-import Link from 'next/link';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { Col, Input, Menu, Row } from 'antd';
 import { useSelector } from 'react-redux';
+import { createGlobalStyle } from 'styled-components';
 
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
 
+const Global = createGlobalStyle`
+  .ant-row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+  
+  .ant-col:first-child {
+      padding-left: 0 !important;
+  }
+  
+  .ant-col:last-child {
+    padding-right: 0 !important;
+  }
+`;
+
 const AppLayout = ({ children }) => {
-  const { me } = useSelector((state) => state.user);
+  const { isLoggedIn } = useSelector((state) => state.user);
 
   const inputSearchStyle = useMemo(
     () => ({
@@ -17,26 +33,29 @@ const AppLayout = ({ children }) => {
     [],
   );
 
+  const menuItems = [
+    {
+      label: <Link href="/">영빈웹</Link>,
+      key: 'home',
+    },
+    {
+      label: <Link href="/profile">프로필</Link>,
+      key: 'profile',
+    },
+    {
+      label: <Input.Search style={inputSearchStyle} />,
+      key: 'mail',
+    },
+  ];
+
   return (
     <div>
-      <Menu mode="horizontal">
-        <Menu.Item key="home">
-          <Link href="/">
-            <a>영빈웹</a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="profile">
-          <Link href="/profile">
-            <a>프로필</a>
-          </Link>
-        </Menu.Item>
-        <Menu.Item key="mail">
-          <Input.Search enterButton style={inputSearchStyle} />
-        </Menu.Item>
-      </Menu>
+      <Global />
+      <Menu items={menuItems} mode="horizontal" />
+      {/* gutter는 컬럼사이의 간격 */}
       <Row gutter={8}>
         <Col xs={24} md={6}>
-          {me ? <UserProfile /> : <LoginForm />}
+          {isLoggedIn ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}
