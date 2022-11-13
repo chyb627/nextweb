@@ -1,3 +1,7 @@
+import shortid from 'shortid';
+import produce from 'immer';
+import faker from 'faker';
+
 export const initialState = {
   mainPosts: [
     {
@@ -6,68 +10,195 @@ export const initialState = {
         id: 1,
         nickname: '영빈차',
       },
-      content: '첫 번째 게시글',
+      content: '첫 번째 게시글 #고양이 #춘식이',
       Images: [
         {
-          src: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
+          id: shortid.generate(),
+          src: 'https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/cnoC/image/1h2u37L1RTpBaU5JCdH9hhKp5jo.JPG',
         },
         {
-          src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
+          id: shortid.generate(),
+          src: 'https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/cnoC/image/JifEUvANMtOyVS56jH38_jiKDaI.JPG',
         },
         {
-          src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
+          id: shortid.generate(),
+          src: 'https://pbs.twimg.com/media/E5icnV0VUAYradL.jpg',
         },
       ],
       Comments: [
         {
+          id: shortid.generate(),
           User: {
+            id: shortid.generate(),
             nickname: 'cha',
           },
-          content: '우와 개정판이 나왔군요~',
+          content: '귀여운 고양이에요~',
         },
         {
+          id: shortid.generate(),
           User: {
+            id: shortid.generate(),
             nickname: 'ahc',
           },
-          content: '얼른 사고싶어요~',
+          content: '고구마 말랭이를 좋아하는것 같아요~',
         },
       ],
     },
   ],
   imagePaths: [],
-  postAdded: false,
+  hasMorePosts: true,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
+  addPostLoading: false,
+  addPostDone: false,
+  addPostError: null,
+  removePostLoading: false,
+  removePostDone: false,
+  removePostError: null,
+  addCommentLoading: false,
+  addCommentDone: false,
+  addCommentError: null,
 };
 
-const ADD_POST = 'ADD_POST';
+export const generateDummyPost = (number) =>
+  Array(number)
+    .fill()
+    .map(() => ({
+      id: shortid.generate(),
+      User: {
+        id: shortid.generate(),
+        nickname: faker.name.findName(),
+      },
+      content: faker.lorem.paragraph(),
+      Images: [
+        {
+          src: faker.image.image(),
+        },
+      ],
+      Comments: [
+        {
+          User: {
+            id: shortid.generate(),
+            nickname: faker.name.findName(),
+          },
+          content: faker.lorem.sentence(),
+        },
+      ],
+    }));
 
-export const addPost = {
-  type: ADD_POST,
-};
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
-const dummyPost = {
-  id: 2,
-  content: '더미데이터입니다.',
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
+
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
+export const addPost = (data) => ({
+  type: ADD_POST_REQUEST,
+  data,
+});
+
+export const addComment = (data) => ({
+  type: ADD_COMMENT_REQUEST,
+  data,
+});
+
+const dummyPost = (data) => ({
+  id: data.id,
+  content: data.content,
   User: {
     id: 1,
     nickname: '영빈촤',
   },
   Images: [],
   Comments: [],
+});
+
+const dummyComment = (data) => ({
+  id: shortid.generate(),
+  content: data,
+  User: {
+    id: 1,
+    nickname: '영빈촤',
+  },
+});
+
+const reducer = (state = initialState, action) => {
+  return produce(state, (draft) => {
+    switch (action.type) {
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = action.data.concat(draft.mainPosts);
+        draft.hasMorePosts = draft.mainPosts.length < 50;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
+      case ADD_POST_REQUEST:
+        draft.addPostLoading = true;
+        draft.addPostDone = false;
+        draft.addPostError = null;
+        break;
+      case ADD_POST_SUCCESS:
+        draft.addPostLoading = false;
+        draft.addPostDone = true;
+        draft.mainPosts.unshift(dummyPost(action.data));
+        break;
+      case ADD_POST_FAILURE:
+        draft.addPostLoading = false;
+        draft.addPostError = action.error;
+        break;
+      case REMOVE_POST_REQUEST:
+        draft.removePostLoading = true;
+        draft.removePostDone = false;
+        draft.removePostError = null;
+        break;
+      case REMOVE_POST_SUCCESS:
+        draft.removePostLoading = false;
+        draft.removePostDone = true;
+        draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+        break;
+      case REMOVE_POST_FAILURE:
+        draft.removePostLoading = false;
+        draft.removePostError = action.error;
+        break;
+      case ADD_COMMENT_REQUEST:
+        draft.addCommentLoading = true;
+        draft.addCommentDone = false;
+        draft.addCommentError = null;
+        break;
+      case ADD_COMMENT_SUCCESS: {
+        const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+        post.Comments.unshift(dummyComment(action.data.content));
+        draft.addCommentLoading = false;
+        draft.addCommentDone = true;
+        break;
+      }
+      case ADD_COMMENT_FAILURE:
+        draft.addCommentLoading = false;
+        draft.addCommentError = action.error;
+        break;
+      default:
+        break;
+    }
+  });
 };
 
-export default (state = initialState, action) => {
-  switch (action.type) {
-    case ADD_POST: {
-      return {
-        ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
-        postAdded: true,
-      };
-    }
-    default: {
-      return {
-        ...state,
-      };
-    }
-  }
-};
+export default reducer;
