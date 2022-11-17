@@ -10,7 +10,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
   const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
-
+  console.log('me:::', me);
   useEffect(() => {
     dispatch({
       type: LOAD_POSTS_REQUEST,

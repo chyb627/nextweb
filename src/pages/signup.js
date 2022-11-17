@@ -16,6 +16,7 @@ const Signup = () => {
   const dispatch = useDispatch();
   const { signUpLoading, signUpDone, signUpError, me } = useSelector((state) => state.user);
 
+  // 로그인 성공시 회원가입 페이지에서 나가기
   useEffect(() => {
     if (me && me.id) {
       Router.replace('/');

@@ -1,13 +1,13 @@
 import produce from 'immer';
 
-const dummyUser = (data) => ({
-  ...data,
-  id: 1,
-  nickname: '영빈차',
-  Posts: [{ id: 1 }],
-  Followings: [{ nickname: '오리' }, { nickname: '춘식이' }, { nickname: '라이언' }],
-  Followers: [{ nickname: '오리' }, { nickname: '춘식이' }, { nickname: '라이언' }],
-});
+// const dummyUser = (data) => ({
+//   ...data,
+//   id: 1,
+//   nickname: '영빈차',
+//   Posts: [{ id: 1 }],
+//   Followings: [{ nickname: '오리' }, { nickname: '춘식이' }, { nickname: '라이언' }],
+//   Followers: [{ nickname: '오리' }, { nickname: '춘식이' }, { nickname: '라이언' }],
+// });
 
 export const initialState = {
   followLoading: false, // 팔로우 시도중
@@ -106,7 +106,7 @@ const reducer = (state = initialState, action) => {
         break;
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
-        draft.me = dummyUser(action.data);
+        draft.me = action.data;
         draft.logInDone = true;
         break;
       case LOG_IN_FAILURE:
