@@ -25,16 +25,13 @@ const ImagesZoom = ({ images, onClose }) => {
           >
             {images.map((v) => (
               <ImgWrapper key={v.src}>
-                <img src={v.src} alt={v.src} />
+                <img src={`http://localhost:3065/${v.src}`} alt={v.src} />
               </ImgWrapper>
             ))}
           </Slick>
           <Indicator>
             <div>
-              {currentSlide + 1}
-              {' '}
-              /
-              {images.length}
+              {currentSlide + 1} /{images.length}
             </div>
           </Indicator>
         </div>
@@ -44,9 +41,11 @@ const ImagesZoom = ({ images, onClose }) => {
 };
 
 ImagesZoom.propTypes = {
-  images: PropTypes.arrayOf(PropTypes.shape({
-    src: PropTypes.string,
-  })).isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string,
+    }),
+  ).isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
