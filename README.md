@@ -135,3 +135,4 @@ const configureStore = () => {    //dispatch
 
 로그아웃
 댓글
+PostCard -> liked -> post.Likers
