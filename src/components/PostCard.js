@@ -20,7 +20,8 @@ const PostCard = ({ post }) => {
   const { removePostLoading } = useSelector((state) => state.post);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector((state) => state.user.me?.id);
-  const liked = post.Likers && post.Likers.find((v) => v.id === id);
+  const liked = post.Likers.find((v) => v.id === id);
+  console.log('liked::', liked);
 
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);

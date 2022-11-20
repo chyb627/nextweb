@@ -134,6 +134,3 @@ const configureStore = () => {    //dispatch
 # 현재 안되는 것
 
 로그아웃
-댓글
-PostCard -> liked -> post.Likers
-로그인

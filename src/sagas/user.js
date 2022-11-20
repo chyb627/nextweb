@@ -2,30 +2,33 @@ import { all, fork, put, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
 
 import {
-  REMOVE_FOLLOWER_FAILURE,
-  REMOVE_FOLLOWER_REQUEST,
-  REMOVE_FOLLOWER_SUCCESS,
+  CHANGE_NICKNAME_FAILURE,
+  CHANGE_NICKNAME_REQUEST,
+  CHANGE_NICKNAME_SUCCESS,
+  FOLLOW_FAILURE,
+  FOLLOW_REQUEST,
+  FOLLOW_SUCCESS,
   LOAD_FOLLOWERS_FAILURE,
   LOAD_FOLLOWERS_REQUEST,
   LOAD_FOLLOWERS_SUCCESS,
   LOAD_FOLLOWINGS_FAILURE,
   LOAD_FOLLOWINGS_REQUEST,
   LOAD_FOLLOWINGS_SUCCESS,
-  CHANGE_NICKNAME_FAILURE,
-  CHANGE_NICKNAME_REQUEST,
-  CHANGE_NICKNAME_SUCCESS,
+  LOAD_MY_INFO_FAILURE,
+  LOAD_MY_INFO_REQUEST,
+  LOAD_MY_INFO_SUCCESS,
   LOAD_USER_FAILURE,
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
-  FOLLOW_FAILURE,
-  FOLLOW_REQUEST,
-  FOLLOW_SUCCESS,
   LOG_IN_FAILURE,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
   LOG_OUT_FAILURE,
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
+  REMOVE_FOLLOWER_FAILURE,
+  REMOVE_FOLLOWER_REQUEST,
+  REMOVE_FOLLOWER_SUCCESS,
   SIGN_UP_FAILURE,
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
@@ -114,8 +117,28 @@ function* changeNickname(action) {
   }
 }
 
-function loadUserAPI() {
+function loadMyInfoAPI() {
   return axios.get('/user');
+}
+
+function* loadMyInfo() {
+  try {
+    const result = yield call(loadMyInfoAPI);
+    yield put({
+      type: LOAD_MY_INFO_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_MY_INFO_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function loadUserAPI(data) {
+  return axios.get(`/user/${data}`);
 }
 
 function* loadUser(action) {
@@ -140,9 +163,7 @@ function logInAPI(data) {
 
 function* logIn(action) {
   try {
-    console.log('saga logIn');
     const result = yield call(logInAPI, action.data);
-    // yield delay(1000);
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -163,7 +184,6 @@ function logOutAPI() {
 function* logOut() {
   try {
     yield call(logOutAPI);
-    // yield delay(1000);
     yield put({
       type: LOG_OUT_SUCCESS,
     });
@@ -183,8 +203,7 @@ function signUpAPI(data) {
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
-    console.log('signUp result :::', result);
-    // yield delay(1000);
+    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
     });
@@ -204,7 +223,6 @@ function followAPI(data) {
 function* follow(action) {
   try {
     const result = yield call(followAPI, action.data);
-    // yield delay(1000);
     yield put({
       type: FOLLOW_SUCCESS,
       data: result.data,
@@ -225,7 +243,6 @@ function unfollowAPI(data) {
 function* unfollow(action) {
   try {
     const result = yield call(unfollowAPI, action.data);
-    // yield delay(1000);
     yield put({
       type: UNFOLLOW_SUCCESS,
       data: result.data,
@@ -255,6 +272,10 @@ function* watchChangeNickname() {
   yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname);
 }
 
+function* watchLoadMyInfo() {
+  yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
+
 function* watchLoadUser() {
   yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
@@ -281,10 +302,11 @@ function* watchSignUp() {
 
 export default function* userSaga() {
   yield all([
-    fork(watchLoadFollowers),
     fork(watchRemoveFollower),
+    fork(watchLoadFollowers),
     fork(watchLoadFollowings),
     fork(watchChangeNickname),
+    fork(watchLoadMyInfo),
     fork(watchLoadUser),
     fork(watchFollow),
     fork(watchUnfollow),
