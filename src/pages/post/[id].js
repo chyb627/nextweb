@@ -1,16 +1,48 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import { END } from 'redux-saga';
+
+import axios from 'axios';
+import wrapper from '../../store/configureStore';
+import PostCard from '../../components/PostCard';
+import AppLayout from '../../components/AppLayout';
+import { LOAD_POST_REQUEST } from '../../reducers/post';
+import { LOAD_MY_INFO_REQUEST } from '../../reducers/user';
 
 const Post = () => {
+  const { singlePost } = useSelector((state) => state.post);
   const router = useRouter();
   const { id } = router.query;
+  console.log('id::::', id);
 
-  return <div>{id}번 게시글</div>;
+  // if (router.isFallback) {
+  //   return <div>Loading...</div>
+  // }
 
-  // 다이나믹 라우팅 사용방법.
-  // http://localhost:3060/post/1  --> 1번 게시글
-  // http://localhost:3060/post/2  ---> 2번 게시글
-  // http://localhost:3060/post/300  ---> 300번 게시글
+  return (
+    <AppLayout>
+      <PostCard post={singlePost} />
+    </AppLayout>
+  );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : '';
+  console.log(context);
+  axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    axios.defaults.headers.Cookie = cookie;
+  }
+  context.store.dispatch({
+    type: LOAD_MY_INFO_REQUEST,
+  });
+  context.store.dispatch({
+    type: LOAD_POST_REQUEST,
+    data: context.params.id,
+  });
+  context.store.dispatch(END);
+  await context.store.sagaTask.toPromise();
+});
 
 export default Post;
