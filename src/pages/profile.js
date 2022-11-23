@@ -5,6 +5,7 @@ import { END } from 'redux-saga';
 import axios from 'axios';
 import useSWR from 'swr';
 
+import Loading from '../components/Loading';
 import AppLayout from '../components/AppLayout';
 import NicknameEditForm from '../components/NicknameEditForm';
 import FollowList from '../components/FollowList';
@@ -46,7 +47,7 @@ const Profile = () => {
   }
 
   if (!me) {
-    return '내 정보 로딩중...';
+    return <Loading />;
   }
   return (
     <>
