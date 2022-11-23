@@ -1,13 +1,14 @@
-import React, { useRef, useCallback, useEffect } from 'react';
-import { Form, Input, Button } from 'antd';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
+import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
 import useInput from '../hooks/useInput';
+import { backUrl } from '../config/config';
 
 const PostForm = () => {
-  const dispatch = useDispatch();
   const { imagePaths, addPostDone } = useSelector((state) => state.post);
+  const dispatch = useDispatch();
   const [text, onChangeText, setText] = useInput('');
 
   useEffect(() => {
@@ -46,14 +47,17 @@ const PostForm = () => {
       type: UPLOAD_IMAGES_REQUEST,
       data: imageFormData,
     });
-  });
+  }, []);
 
-  const onRemoveImage = useCallback((index) => () => {
-    dispatch({
-      type: REMOVE_IMAGE,
-      data: index,
-    });
-  });
+  const onRemoveImage = useCallback(
+    (index) => () => {
+      dispatch({
+        type: REMOVE_IMAGE,
+        data: index,
+      });
+    },
+    [],
+  );
 
   return (
     <Form style={{ margin: '10px 0 20px' }} encType="multipart/form-data" onFinish={onSubmit}>
@@ -61,21 +65,19 @@ const PostForm = () => {
       <div>
         <input type="file" name="image" multiple hidden ref={imageInput} onChange={onChangeImages} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <Button style={{ float: 'right' }} htmlType="submit">
+        <Button type="primary" style={{ float: 'right' }} htmlType="submit">
           게시
         </Button>
       </div>
       <div>
-        {imagePaths.map((v, i) => {
-          return (
-            <div key={v} style={{ display: 'inline-block' }}>
-              <img src={'http://localhost:3065/' + v} style={{ width: '200px' }} alt={v} />
-              <div>
-                <Button onClick={onRemoveImage(i)}>제거</Button>
-              </div>
+        {imagePaths.map((v, i) => (
+          <div key={v} style={{ display: 'inline-block' }}>
+            <img src={v.replace(/\/thumb\//, '/original/')} style={{ width: '200px' }} alt={v} />
+            <div>
+              <Button onClick={onRemoveImage(i)}>제거</Button>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </Form>
   );

@@ -133,4 +133,5 @@ const configureStore = () => {    //dispatch
 
 # 현재 안되는 것
 
-로그아웃
+LOAD_HASHTAG_POSTS
+LOG_OUT
