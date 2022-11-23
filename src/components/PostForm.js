@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
 import useInput from '../hooks/useInput';
-import { backUrl } from '../config/config';
+// import { backUrl } from '../config/config';
 
 const PostForm = () => {
   const { imagePaths, addPostDone } = useSelector((state) => state.post);
@@ -65,7 +65,7 @@ const PostForm = () => {
       <div>
         <input type="file" name="image" multiple hidden ref={imageInput} onChange={onChangeImages} />
         <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-        <Button type="primary" style={{ float: 'right' }} htmlType="submit">
+        <Button style={{ float: 'right' }} htmlType="submit">
           게시
         </Button>
       </div>
