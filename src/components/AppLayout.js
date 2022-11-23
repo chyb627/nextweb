@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Col, Input, Menu, Row } from 'antd';
@@ -7,6 +7,8 @@ import { createGlobalStyle } from 'styled-components';
 
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
+import useInput from '../hooks/useInput';
+import Router from 'next/router';
 
 const Global = createGlobalStyle`
   .ant-row {
@@ -25,6 +27,7 @@ const Global = createGlobalStyle`
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
+  const [searchInput, onChangeSearchInput] = useInput('');
 
   const inputSearchStyle = useMemo(
     () => ({
@@ -32,6 +35,10 @@ const AppLayout = ({ children }) => {
     }),
     [],
   );
+
+  const onSearch = useCallback(() => {
+    Router.push(`/hashtag/${searchInput}`);
+  }, [searchInput]);
 
   const menuItems = [
     {
@@ -43,7 +50,9 @@ const AppLayout = ({ children }) => {
       key: 'profile',
     },
     {
-      label: <Input.Search style={inputSearchStyle} />,
+      label: (
+        <Input.Search style={inputSearchStyle} value={searchInput} onChange={onChangeSearchInput} onSearch={onSearch} />
+      ),
       key: 'mail',
     },
   ];

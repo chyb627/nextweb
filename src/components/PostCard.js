@@ -1,30 +1,52 @@
 import React, { useState, useCallback } from 'react';
-import { Card, Button, Avatar, List, Comment, Popover } from 'antd';
 import PropTypes from 'prop-types';
-import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
+import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
+import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
+import Link from 'next/link';
+import moment from 'moment';
 
+import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import PostImages from './PostImages';
+import {
+  LIKE_POST_REQUEST,
+  REMOVE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
+  RETWEET_REQUEST,
+  UPDATE_POST_REQUEST,
+} from '../reducers/post';
 import FollowButton from './FollowButton';
-import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 
-const CardWrapper = styled.div`
-  margin-bottom: 20px;
-`;
+moment.locale('ko');
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const { removePostLoading } = useSelector((state) => state.post);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector((state) => state.user.me?.id);
-  const liked = post.Likers.find((v) => v.id === id);
+  const [editMode, setEditMode] = useState(false);
 
-  const onToggleComment = useCallback(() => {
-    setCommentFormOpened((prev) => !prev);
+  const onClickUpdate = useCallback(() => {
+    setEditMode(true);
   }, []);
+
+  const onCancelUpdate = useCallback(() => {
+    setEditMode(false);
+  }, []);
+
+  const onChangePost = useCallback(
+    (editText) => () => {
+      dispatch({
+        type: UPDATE_POST_REQUEST,
+        data: {
+          PostId: post.id,
+          content: editText,
+        },
+      });
+    },
+    [post],
+  );
 
   const onLike = useCallback(() => {
     if (!id) {
@@ -44,6 +66,9 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, [id]);
+  const onToggleComment = useCallback(() => {
+    setCommentFormOpened((prev) => !prev);
+  }, []);
 
   const onRemovePost = useCallback(() => {
     if (!id) {
@@ -65,8 +90,9 @@ const PostCard = ({ post }) => {
     });
   }, [id]);
 
+  const liked = post.Likers.find((v) => v.id === id);
   return (
-    <CardWrapper key={post.id}>
+    <div style={{ marginBottom: 20 }}>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -83,7 +109,7 @@ const PostCard = ({ post }) => {
               <Button.Group>
                 {id && post.User.id === id ? (
                   <>
-                    <Button>수정</Button>
+                    {!post.RetweetId && <Button onClick={onClickUpdate}>수정</Button>}
                     <Button loading={removePostLoading} onClick={onRemovePost}>
                       삭제
                     </Button>
@@ -97,27 +123,52 @@ const PostCard = ({ post }) => {
             <EllipsisOutlined />
           </Popover>,
         ]}
-        title={post.RetweetId && `${post.User.nickname}님이 리트윗 하셨습니다.`}
+        title={post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null}
         extra={id && <FollowButton post={post} />}
       >
         {post.RetweetId && post.Retweet ? (
           <Card cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}>
+            <div style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
             <Card.Meta
-              avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
+              avatar={
+                <Link href={`/user/${post.Retweet.User.id}`} prefetch={false}>
+                  <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                </Link>
+              }
               title={post.Retweet.User.nickname}
-              description={<PostCardContent postData={post.Retweet.content} />}
+              description={
+                <PostCardContent
+                  postData={post.Retweet.content}
+                  onChangePost={onChangePost}
+                  onCancelUpdate={onCancelUpdate}
+                />
+              }
             />
           </Card>
         ) : (
-          <Card.Meta
-            avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-            title={post.User.nickname}
-            description={<PostCardContent postData={post.content} />}
-          />
+          <>
+            <div style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</div>
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.User.id}`} prefetch={false}>
+                  <Avatar>{post.User.nickname[0]}</Avatar>
+                </Link>
+              }
+              title={post.User.nickname}
+              description={
+                <PostCardContent
+                  editMode={editMode}
+                  onChangePost={onChangePost}
+                  onCancelUpdate={onCancelUpdate}
+                  postData={post.content}
+                />
+              }
+            />
+          </>
         )}
       </Card>
       {commentFormOpened && (
-        <>
+        <div>
           <CommentForm post={post} />
           <List
             header={`${post.Comments.length}개의 댓글`}
@@ -127,15 +178,19 @@ const PostCard = ({ post }) => {
               <li>
                 <Comment
                   author={item.User.nickname}
-                  avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                  avatar={
+                    <Link href={`/user/${item.User.id}`} prefetch={false}>
+                      <Avatar>{item.User.nickname[0]}</Avatar>
+                    </Link>
+                  }
                   content={item.content}
                 />
               </li>
             )}
           />
-        </>
+        </div>
       )}
-    </CardWrapper>
+    </div>
   );
 };
 
