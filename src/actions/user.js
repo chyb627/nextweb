@@ -53,7 +53,7 @@ export const changeNickname = createAsyncThunk('user/changeNickname', async (dat
 
 export const follow = createAsyncThunk('post/follow', async (data, { rejectWithValue }) => {
   try {
-    const response = await axios.patch(`/user/${data.userId}/following`);
+    const response = await axios.patch(`/user/${data.userId}/follow`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -62,7 +62,7 @@ export const follow = createAsyncThunk('post/follow', async (data, { rejectWithV
 
 export const unfollow = createAsyncThunk('post/unfollow', async (data, { rejectWithValue }) => {
   try {
-    const response = await axios.delete(`/user/${data.userId}/following`);
+    const response = await axios.delete(`/user/${data.userId}/follow`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
