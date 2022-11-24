@@ -1,7 +1,9 @@
 # nextweb
+
 nextweb
 
 ## package.json 생성
+
 npm init
 
 ## package설치
@@ -14,7 +16,7 @@ npm i prop-types
 
 ## Link 사용방법
 
-``<Link href={"/"}><a>영빈웹</a></Link>``
+`<Link href={"/"}><a>영빈웹</a></Link>`
 
 ## eslint, prettier
 
@@ -57,14 +59,14 @@ npm i next-redux-wrapper react-redux redux redux-devtools-extension
 7. reducer에서 어떻게 바뀌는지도 일일이 적어줘야함.
 8. reducer, switch case 문을 통하여 아래와같이 구현해준다.
 
-``` javascript
-switch(action.type){
-  case 'CHANGE_NAME': 
+```javascript
+switch (action.type) {
+  case 'CHANGE_NAME':
     return {
-      ...state,   // const state = {name:'cha', age:22, password:'biri'}라고 가정
+      ...state, // const state = {name:'cha', age:22, password:'biri'}라고 가정
       name: action.data,
-    }
-};
+    };
+}
 ```
 
 ## 리덕스 구현
@@ -73,10 +75,10 @@ switch(action.type){
 2. src/reducers/index 생성.
 3. store는 state와 reducer를 포함하는 것
 
-``` javascript
-
+```javascript
 // src/reducers/index
-const initialState = {  //state
+const initialState = {
+  //state
   name: 'youngcha',
   age: 22,
   password: 'biri',
@@ -87,44 +89,56 @@ const initialState = {  //state
 //   data: 'bincha',
 // }
 
-const changeName = (data) => {  // 액션 creater
+const changeName = (data) => {
+  // 액션 creater
   return {
     type: 'CHANGE_NAME',
     data,
-  }
+  };
 };
 changeName('bincha');
-store.dispatch(changeName('bincha'))
+store.dispatch(changeName('bincha'));
 
-const rootReducer = (state = initialState, action) => {  //reducer
+const rootReducer = (state = initialState, action) => {
+  //reducer
   switch (action.type) {
     case 'CHANGE_NAME':
       // state.name = 'bincha' 이런식으로 직접바꾸면 안된다.
-      return{
+      return {
         ...state,
         name: action.data,
-      }
+      };
       break;
   }
-}
-
+};
 
 // src/store/configureStore
-const configureStore = () => {    //dispatch
+const configureStore = () => {
+  //dispatch
   const store = createStore(reducer);
   store.dispatch({
     type: 'CHANGE_NAME',
     data: 'bincha',
-  })
+  });
   return store;
-}
-
+};
 ```
 
 4. 위코드에서 src/store/configureStore에서 configureStore를 dispatch하는 순간 reducer로 전달이된다.
 5. type: 'CHANGE_NAME', data: 'bincha',가 전달이 된다.
 6. rootReducer 함수는 (이전상태, 액션)을 통해서 다음상태를 만든다.
 
-- map을 사용할때 key에 index를 넣으면 안된다. 
+- map을 사용할때 key에 index를 넣으면 안된다.
 - 특히 게시글이 지워질 가능성이 있는경우 절대로 쓰면 안된다.
 - 순서가 달라지거나 중간에 무언가 추가될때도 키를 index로 쓰면안된다.
+
+## 툴킷변경 문제점 체크
+
+로그인 - o
+로그아웃 - o
+회원가입 - o
+게시글 - 이미지업로드 x 500
+팔로우 - x 404
+좋아요/취소 - o
+리트윗 - o
+댓글 - o

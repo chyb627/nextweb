@@ -1,1 +1,2 @@
-export const backUrl = process.env.NODE_ENV === 'production' ? 'http://api.youngbinweb.com' : 'http://localhost:3065';
+export const backendUrl =
+  process.env.NODE_ENV === 'production' ? 'http://api.youngbinweb.com' : 'http://localhost:3065';

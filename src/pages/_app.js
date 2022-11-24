@@ -5,24 +5,26 @@ import 'antd/dist/antd.css';
 import '../styles/index.css';
 import wrapper from '../store/configureStore';
 
-const YoungbinWeb = ({ Component }) => {
+const YoungbinWeb = ({ Component, pageProps }) => {
   return (
     <>
       <Head>
         <meta charSet="utf-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        />
+        <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         <title>YoungbinWeb</title>
       </Head>
-      <Component />
+      <Component {...pageProps} />
     </>
   );
 };
 
 YoungbinWeb.propTypes = {
   Component: PropTypes.elementType.isRequired,
+  pageProps: PropTypes.any.isRequired,
 };
-
-export function reportWebVitals(metric) {
-  console.log(metric);
-}
 
 export default wrapper.withRedux(YoungbinWeb);

@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
+import postSlice from '../reducers/post';
+import { addPost, uploadImages } from '../actions/post';
 import useInput from '../hooks/useInput';
 // import { backUrl } from '../config/config';
 
@@ -22,14 +23,12 @@ const PostForm = () => {
       return alert('게시글을 작성하세요.');
     }
     const formData = new FormData();
-    imagePaths.forEach((p) => {
-      formData.append('image', p);
+    imagePaths.forEach((image) => {
+      formData.append('image', image);
     });
     formData.append('content', text);
-    return dispatch({
-      type: ADD_POST_REQUEST,
-      data: formData,
-    });
+    // return
+    dispatch(addPost(formData));
   }, [text, imagePaths]);
 
   const imageInput = useRef();
@@ -40,21 +39,15 @@ const PostForm = () => {
   const onChangeImages = useCallback((e) => {
     console.log('images', e.target.files);
     const imageFormData = new FormData();
-    [].forEach.call(e.target.files, (f) => {
-      imageFormData.append('image', f);
+    [].forEach.call(e.target.files, (image) => {
+      imageFormData.append('image', image);
     });
-    dispatch({
-      type: UPLOAD_IMAGES_REQUEST,
-      data: imageFormData,
-    });
+    dispatch(uploadImages(imageFormData));
   }, []);
 
   const onRemoveImage = useCallback(
     (index) => () => {
-      dispatch({
-        type: REMOVE_IMAGE,
-        data: index,
-      });
+      dispatch(postSlice.actions.removeImage(index));
     },
     [],
   );

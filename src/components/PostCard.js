@@ -9,13 +9,7 @@ import moment from 'moment';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
-import {
-  LIKE_POST_REQUEST,
-  REMOVE_POST_REQUEST,
-  UNLIKE_POST_REQUEST,
-  RETWEET_REQUEST,
-  UPDATE_POST_REQUEST,
-} from '../reducers/post';
+import { likePost, removePost, retweet, unlikePost, updatePost } from '../actions/post';
 import FollowButton from './FollowButton';
 
 moment.locale('ko');
@@ -37,13 +31,12 @@ const PostCard = ({ post }) => {
 
   const onChangePost = useCallback(
     (editText) => () => {
-      dispatch({
-        type: UPDATE_POST_REQUEST,
-        data: {
+      dispatch(
+        updatePost({
           PostId: post.id,
           content: editText,
-        },
-      });
+        }),
+      );
     },
     [post],
   );
@@ -52,19 +45,23 @@ const PostCard = ({ post }) => {
     if (!id) {
       return alert('로그인이 필요합니다.');
     }
-    return dispatch({
-      type: LIKE_POST_REQUEST,
-      data: post.id,
-    });
+    // return
+    dispatch(
+      likePost({
+        postId: post.id,
+      }),
+    );
   }, [id]);
   const onUnlike = useCallback(() => {
     if (!id) {
       return alert('로그인이 필요합니다.');
     }
-    return dispatch({
-      type: UNLIKE_POST_REQUEST,
-      data: post.id,
-    });
+    // return
+    dispatch(
+      unlikePost({
+        postId: post.id,
+      }),
+    );
   }, [id]);
   const onToggleComment = useCallback(() => {
     setCommentFormOpened((prev) => !prev);
@@ -74,20 +71,24 @@ const PostCard = ({ post }) => {
     if (!id) {
       return alert('로그인이 필요합니다.');
     }
-    return dispatch({
-      type: REMOVE_POST_REQUEST,
-      data: post.id,
-    });
+    // return
+    dispatch(
+      removePost({
+        postId: post.id,
+      }),
+    );
   }, [id]);
 
   const onRetweet = useCallback(() => {
     if (!id) {
       return alert('로그인이 필요합니다.');
     }
-    return dispatch({
-      type: RETWEET_REQUEST,
-      data: post.id,
-    });
+    // return
+    dispatch(
+      retweet({
+        postId: post.id,
+      }),
+    );
   }, [id]);
 
   const liked = post.Likers.find((v) => v.id === id);

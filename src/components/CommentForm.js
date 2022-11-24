@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
 import useInput from '../hooks/useInput';
-import { ADD_COMMENT_REQUEST } from '../reducers/post';
+import { addComment } from '../actions/post';
 
 const CommentForm = ({ post }) => {
   const dispatch = useDispatch();
@@ -20,10 +20,13 @@ const CommentForm = ({ post }) => {
 
   const onSubmitComment = useCallback(() => {
     console.log(id, post.id, commentText);
-    dispatch({
-      type: ADD_COMMENT_REQUEST,
-      data: { content: commentText, postId: post.id, userId: id },
-    });
+    dispatch(
+      addComment({
+        content: commentText,
+        postId: post.id,
+        userId: id,
+      }),
+    );
   }, [commentText, id]);
 
   return (

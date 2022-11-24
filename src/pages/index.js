@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { END } from 'redux-saga';
 import axios from 'axios';
 
 import AppLayout from '../components/AppLayout';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
-import { LOAD_POSTS_REQUEST } from '../reducers/post';
-import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
+import { loadMyInfo } from '../actions/user';
+import { loadPosts } from '../actions/post';
 import wrapper from '../store/configureStore';
 
 const Home = () => {
@@ -26,10 +25,11 @@ const Home = () => {
       if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (hasMorePosts && !loadPostsLoading) {
           const lastId = mainPosts[mainPosts.length - 1]?.id;
-          dispatch({
-            type: LOAD_POSTS_REQUEST,
-            lastId,
-          });
+          dispatch(
+            loadPosts({
+              lastId,
+            }),
+          );
         }
       }
     }
@@ -48,20 +48,22 @@ const Home = () => {
   );
 };
 
+// SSR (프론트 서버에서 실행)
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   const cookie = context.req ? context.req.headers.cookie : '';
   axios.defaults.headers.Cookie = '';
+  // 쿠키가 브라우저에 있는경우만 넣어서 실행
+  // (주의, 아래 조건이 없다면 다른 사람으로 로그인 될 수도 있음)
   if (context.req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
-  context.store.dispatch({
-    type: LOAD_MY_INFO_REQUEST,
-  });
-  context.store.dispatch({
-    type: LOAD_POSTS_REQUEST,
-  });
-  context.store.dispatch(END);
-  await context.store.sagaTask.toPromise();
+
+  await context.store.dispatch(loadPosts());
+  await context.store.dispatch(loadMyInfo());
+
+  // return {
+  //   props: {},
+  // };
 });
 
 export default Home;

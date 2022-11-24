@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import { List, Button, Card } from 'antd';
 import { StopOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-
-import { UNFOLLOW_REQUEST, REMOVE_FOLLOWER_REQUEST } from '../reducers/user';
+import { removeFollow, unfollow } from '../actions/user';
 
 const FollowList = ({ header, data, onClickMore, loading }) => {
   const dispatch = useDispatch();
-  const onCancel = (id) => () => {
+  const onCancel = (userId) => () => {
     if (header === '팔로잉') {
-      dispatch({
-        type: UNFOLLOW_REQUEST,
-        data: id,
-      });
+      dispatch(
+        unfollow({
+          userId,
+        }),
+      );
     }
-    dispatch({
-      type: REMOVE_FOLLOWER_REQUEST,
-      data: id,
-    });
+    dispatch(
+      removeFollow({
+        userId,
+      }),
+    );
   };
 
   return (

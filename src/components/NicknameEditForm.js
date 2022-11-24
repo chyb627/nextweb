@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useInput from '../hooks/useInput';
 import { CHANGE_NICKNAME_REQUEST } from '../reducers/user';
+import { changeNickname } from '../actions/user';
 
 const NicknameEditForm = () => {
   const dispatch = useDispatch();
@@ -10,10 +11,11 @@ const NicknameEditForm = () => {
   const [nickname, onChangeNickname] = useInput(me?.nickname || '');
 
   const onSubmit = useCallback(() => {
-    dispatch({
-      type: CHANGE_NICKNAME_REQUEST,
-      data: nickname,
-    });
+    dispatch(
+      changeNickname({
+        nickname,
+      }),
+    );
   }, [nickname]);
 
   return (
