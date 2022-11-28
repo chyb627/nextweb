@@ -45,7 +45,7 @@ const Hashtag = () => {
 };
 
 // SSR (프론트 서버에서 실행)
-export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const cookie = context.req ? context.req.headers.cookie : '';
   axios.defaults.headers.Cookie = '';
   // 쿠키가 브라우저에 있는경우만 넣어서 실행
@@ -53,8 +53,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   if (context.req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
-  await context.store.dispatch(loadHashtagPosts({ hashtag: context.params.tag }));
-  await context.store.dispatch(loadMyInfo());
+  await store.dispatch(loadHashtagPosts({ hashtag: context.params.tag }));
+  await store.dispatch(loadMyInfo());
 
   // return {
   //   props: {},
