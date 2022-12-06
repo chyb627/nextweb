@@ -1,11 +1,11 @@
 import React from 'react';
+import App, { AppProps } from 'next/app';
 import Head from 'next/head';
-import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
 import '../styles/index.css';
 import wrapper from '../store/configureStore';
 
-const YoungbinWeb = ({ Component, pageProps }) => {
+const YoungbinWeb = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Head>
@@ -20,11 +20,6 @@ const YoungbinWeb = ({ Component, pageProps }) => {
       <Component {...pageProps} />
     </>
   );
-};
-
-YoungbinWeb.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  pageProps: PropTypes.any.isRequired,
 };
 
 export default wrapper.withRedux(YoungbinWeb);
