@@ -56,7 +56,7 @@ const Signup = () => {
   return (
     <AppLayout>
       <Head>
-        <title>회원가입 | NodeBird</title>
+        <title>회원가입 | YoungbinWeb</title>
       </Head>
       <Formik
         initialValues={{
